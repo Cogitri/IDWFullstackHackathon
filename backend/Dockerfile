@@ -7,7 +7,7 @@ RUN npm run build
 
 FROM node:current-alpine
 WORKDIR /usr/src/app
-COPY --from=builder /build/package*.json /build/dist/ .
+COPY --from=builder /build/package*.json /build/dist/ ./
 RUN npm install
 
 CMD [ "node", "app.js" ]
