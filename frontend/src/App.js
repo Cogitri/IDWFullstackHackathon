@@ -9,6 +9,7 @@ import { Hero } from './routes/hero/Hero';
 import { ProtectedRoute } from './utils/routes/ProtectedRoute';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
+import { Products } from './routes/farmer/products/Products';
 
 const theme = createMuiTheme({
 	palette: {
@@ -24,7 +25,7 @@ const theme = createMuiTheme({
 			dark: '#ab000d',
 			contrastText: '#000',
 		},
-		darkBackground: {
+		darkbg: {
 			main: '#4c4c4c',
 			contrastText: '#fff',
 		},
@@ -34,16 +35,15 @@ const theme = createMuiTheme({
 export const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
-			<Paper style={{ height: '100vh' }}>
-				<BrowserRouter>
-					<Switch>
-						<ProtectedRoute path='/farmer' component={Farmer} />
-						<Route path='/login' component={Login} />
-						<Route exact path='/' component={Hero} />
-						<Route component={() => <p>404 - Page not found 🐱‍👤</p>} />
-					</Switch>
-				</BrowserRouter>
-			</Paper>
+			<BrowserRouter>
+				<Switch>
+					<ProtectedRoute path='/farmer/:farmerId' component={Products} />
+					<ProtectedRoute path='/farmer' component={Farmer} />
+					<Route path='/login' component={Login} />
+					<Route exact path='/' component={Hero} />
+					<Route component={() => <p>404 - Page not found 🐱‍👤</p>} />
+				</Switch>
+			</BrowserRouter>
 		</ThemeProvider>
 	);
 };
