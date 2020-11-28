@@ -18,9 +18,9 @@ export class StoreService {
 
   @Path("/order/:orderId")
   @GET
-  getOrderInfo(@PathParam("orderId") orderId: string): string {
+  getOrderInfo(@PathParam("orderId") orderId: number): string {
     let order: Order = {
-      id: 0,
+      id: orderId,
       productId: 0,
       quantity: 1,
       orderDate: new Date(),
