@@ -9,7 +9,7 @@ on: push
 #   AZURE_CREDENTIALS, REGISTRY_USERNAME, REGISTRY_PASSWORD
 # 2. Change these variables for your configuration:
 env:
-  AZURE_WEBAPP_NAME: golocal
+  AZURE_WEBAPP_NAME: idwgolocal
 
 jobs:
   build-and-deploy-to-dev:
@@ -34,20 +34,20 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Docker Build & Push to ACR
         run: |
-          docker build ./backend -f backend/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
-          docker build ./backend/db -f backend/db/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/db_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
-          docker build ./frontend -f frontend/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/db_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+          docker build ./backend -f backend/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend_${{ env.AZURE_WEBAPP_NAME }}:latest
+          docker build ./backend/db -f backend/db/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/db_${{ env.AZURE_WEBAPP_NAME }}:latest
+          docker build ./frontend -f frontend/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:latest
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend_${{ env.AZURE_WEBAPP_NAME }}:latest
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/db_${{ env.AZURE_WEBAPP_NAME }}:latest
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:latest
       - name: "Deploy to Azure Web App for Container"
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          images: ${{ secrets.CONTAINER_REGISTRY }}/backend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+          images: ${{ secrets.CONTAINER_REGISTRY }}/backend_${{ env.AZURE_WEBAPP_NAME }}:latest
       - name: "Deploy to Azure Web App for Container"
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           configuration-file: docker-compose-azure.yml
-          images: ${{ secrets.CONTAINER_REGISTRY }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+          images: ${{ secrets.CONTAINER_REGISTRY }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:latest
