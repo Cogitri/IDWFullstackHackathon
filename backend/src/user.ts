@@ -1,5 +1,15 @@
-import { Path, PathParam, QueryParam, GET, POST, PUT } from "typescript-rest";
+import {
+  Path,
+  PathParam,
+  QueryParam,
+  GET,
+  POST,
+  PUT,
+  Context,
+  ServiceContext,
+} from "typescript-rest";
 import { ProductAndAmount } from "./product";
+import { Status, StatusErr, StatusOK } from "./common";
 
 interface User {
   id: number;
@@ -24,36 +34,39 @@ interface Login {
 
 @Path("/user")
 export class UserService {
+  @Context
+  context: ServiceContext;
+
   @POST
-  createUser(createdUser: User) {
+  createUser(createdUser: User): Status {
     // create new user entry in database with provided credentials
     // Surround with try-catch (return '{"status":"err"}' on error)
 
     // Placeholder until database is set up
-    return '{"status":"ok"}';
+    return StatusOK;
   }
 
   @Path("/login")
   @POST
-  loginUser(login: Login): string {
+  loginUser(login: Login): Status {
     // Check if the following parameters match the database entries
     // login.username && login.password
     // true -> return '{"status":"ok"}';
     // false -> return '{"status":"err"}';
 
     // Placeholder until database is set up
-    return '{"status":"ok"}';
+    return StatusOK;
   }
 
   @Path("/logout")
   @GET
-  logoutUser(@QueryParam("username") username: string): string {
-    return '{"status":"ok"}';
+  logoutUser(@QueryParam("username") username: string): Status {
+    return StatusOK;
   }
 
   @Path(":username")
   @GET
-  getUserInfo(@PathParam("username") username: string): string {
+  getUserInfo(@PathParam("username") username: string): Status {
     // Placeholder until database is set up
     let user: User = {
       id: 0,
@@ -67,14 +80,14 @@ export class UserService {
       latitude: 0,
       isFarmer: false,
     };
-    return JSON.stringify(user);
+    return StatusOK;
   }
 
   @Path(":username")
   @PUT
-  editUserInfo(newUser: User): string {
+  editUserInfo(newUser: User): Status {
     // Change user information in database accordingly to body content
     // Surround with try-catch (return '{"status":"err"}' on error)
-    return '{"status":"ok"}';
+    return StatusOK;
   }
 }
