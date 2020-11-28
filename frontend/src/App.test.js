@@ -24,12 +24,16 @@ describe('app', () => {
 
 	test('404', () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4da4a90... routing + herPage
 		// TODO fix
 		// const history = createMemoryHistory();
 		// history.push('/invalidUrl');
 		// const { getByText } = render(<App />);
 		// expect(getByText('404 - Page not found 🐱‍👤')).toBeInTheDocument();
 		expect(true).toBeTruthy();
+<<<<<<< HEAD
 =======
 		const history = createMemoryHistory();
 		history.push('/invalidUrl');
@@ -37,5 +41,7 @@ describe('app', () => {
 
 		expect(getByText('404 - Page not found 🐱‍👤')).toBeInTheDocument();
 >>>>>>> 7ae3276... assets; WIP: loginPage
+=======
+>>>>>>> 4da4a90... routing + herPage
 	});
 });

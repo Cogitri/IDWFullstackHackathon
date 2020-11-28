@@ -21,9 +21,12 @@ describe('hero', () => {
 		const { getByText } = render(<Hero />);
 		expect(getByText('Local Goods, Local Smiles')).toBeInTheDocument();
 	});
+<<<<<<< HEAD
 
 	test('renders button', () => {
 		const { getByTestId } = render(<Hero />);
 		expect(getByTestId('getStartedButton')).toBeInTheDocument();
 	});
+=======
+>>>>>>> 4da4a90... routing + herPage
 });
