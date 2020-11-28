@@ -20,12 +20,16 @@ export const App = () => (
 			<Route path='/login' component={Login} />
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			<Route exact path='/' component={Hero} />
 			<Route component={() => <p>404 - Page not found 🐱‍👤</p>} />
 =======
 			<Route component={FourOFour} />
 >>>>>>> 002ec46... routing
 =======
+=======
+			<Route exact path='/' component={Hero} />
+>>>>>>> 4da4a90... routing + herPage
 			<Route component={() => <p>404 - Page not found 🐱‍👤</p>} />
 >>>>>>> 7ae3276... assets; WIP: loginPage
 		</Switch>

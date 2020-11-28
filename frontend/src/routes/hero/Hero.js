@@ -12,6 +12,7 @@ export const Hero = () => (
 				<h1 className='localHeadingGreen'>Local</h1>
 			</div>
 			<p>Local Goods, Local Smiles</p>
+<<<<<<< HEAD
 			<Button
 				data-testid={'getStartedButton'}
 				variant='contained'
@@ -19,6 +20,9 @@ export const Hero = () => (
 				href='/login'
 				className='getStartedButton'
 			>
+=======
+			<Button variant='contained' color='primary'>
+>>>>>>> 4da4a90... routing + herPage
 				Get Started
 			</Button>
 		</div>

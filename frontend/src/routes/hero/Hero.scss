@@ -18,7 +18,11 @@
 	div {
 		div {
 			display: flex;
+<<<<<<< HEAD
 			justify-content: flex-start;
+=======
+			justify-content: start;
+>>>>>>> 4da4a90... routing + herPage
 			.localHeadingGreen {
 				color: #00e676;
 			}
@@ -28,7 +32,11 @@
 			margin: 0 0 10rem 2rem;
 		}
 
+<<<<<<< HEAD
 		.getStartedButton {
+=======
+		Button {
+>>>>>>> 4da4a90... routing + herPage
 			margin-left: 8rem;
 		}
 	}
