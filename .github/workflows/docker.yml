@@ -47,7 +47,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        configuration-file: docker-compose.yml
+        configuration-file: docker-compose-azure.yml
         images: ${{ secrets.CONTAINER_REGISTRY }}/frontend_${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
 
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
