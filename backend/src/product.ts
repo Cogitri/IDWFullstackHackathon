@@ -4,12 +4,14 @@ interface Product {
   id: number;
   category: Category;
   name: string;
+  description: string;
   photoUrls: [string];
   expiryDate: string;
   manufacturingDate: string;
   paymentMethod: string;
   deliveryMethod: string;
   status: Status;
+  stock: number;
   price: number;
 }
 
@@ -42,6 +44,7 @@ export class ProductService {
     let product: Product = {
       id: 0,
       name: "example",
+      description: "test",
       category: { id: 5, name: "test" },
       photoUrls: [""],
       status: Status.Available,
@@ -50,6 +53,7 @@ export class ProductService {
       paymentMethod: "cash",
       deliveryMethod: "pick-up",
       price: 0,
+      stock: 10,
     };
     return JSON.stringify(product);
   }

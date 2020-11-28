@@ -11,15 +11,11 @@ interface User {
   phone: string;
   longitude: number;
   latitude: number;
+  isFarmer: boolean;
+  products?: ProductAndAmount[];
+  farmingMethodology?: string;
+  covidGuidelines?: string;
 }
-
-interface Farmer extends User {
-  products: ProductAndAmount[];
-  farmingMethodology: string;
-  covidGuidelines: string;
-}
-
-interface Customer extends User {}
 
 interface Login {
   username: string;
@@ -69,6 +65,7 @@ export class UserService {
       phone: "+490000",
       longitude: 0,
       latitude: 0,
+      isFarmer: false,
     };
     return JSON.stringify(user);
   }
