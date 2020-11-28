@@ -1,4 +1,4 @@
-import { Path, GET, PathParam, POST, PUT, DELETE } from "typescript-rest";
+import { Path, PathParam, QueryParam, GET, POST, PUT } from "typescript-rest";
 
 interface User {
   id: number;
@@ -10,44 +10,47 @@ interface User {
   userStatus: string;
 }
 
+interface Login {
+  username: string;
+  password: string;
+}
+
 @Path("/user")
 export class UserService {
   @POST
-  createUser() {
-    // create User and return its info
-    let createdUser: User = {
-      id: 0,
-      username: "admin",
-      firstName: "admin",
-      lastName: "admin",
-      email: "admin@example.org",
-      phone: "+490000",
-      userStatus: "admin",
-    };
-    return JSON.stringify(createdUser);
+  createUser(createdUser: User) {
+    // create new user entry in database with provided credentials
+    // Surround with try-catch (return '{"status":"err"}' on error)
+
+    // Placeholder until database is set up
+    return '{"status":"ok"}';
   }
 
   @Path("/login")
-  @GET
-  loginUser(
-    @PathParam("login") username: string,
-    @PathParam("password") password: string
-  ): string {
+  @POST
+  loginUser(login: Login): string {
+    // Check if the following parameters match the database entries
+    // login.username && login.password
+    // true -> return '{"status":"ok"}';
+    // false -> return '{"status":"err"}';
+
+    // Placeholder until database is set up
     return '{"status":"ok"}';
   }
 
   @Path("/logout")
   @GET
-  logoutUser(): string {
+  logoutUser(@QueryParam("username") username: string): string {
     return '{"status":"ok"}';
   }
 
   @Path(":username")
   @GET
   getUserInfo(@PathParam("username") username: string): string {
+    // Placeholder until database is set up
     let user: User = {
       id: 0,
-      username: "admin",
+      username,
       firstName: "admin",
       lastName: "admin",
       email: "admin@example.org",
@@ -59,13 +62,9 @@ export class UserService {
 
   @Path(":username")
   @PUT
-  editUserInfo(@PathParam("username") username: string): string {
-    return '{"status":"ok"}';
-  }
-
-  @Path(":username")
-  @DELETE
-  deleteUser(@PathParam("username") username: string): string {
+  editUserInfo(newUser: User): string {
+    // Change user information in database accordingly to body content
+    // Surround with try-catch (return '{"status":"err"}' on error)
     return '{"status":"ok"}';
   }
 }
