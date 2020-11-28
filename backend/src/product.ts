@@ -1,4 +1,5 @@
 import { Path, GET, PathParam, POST, DELETE } from "typescript-rest";
+import { Status, StatusErr, StatusOK } from "./common";
 
 interface Product {
   id: number;
@@ -10,12 +11,12 @@ interface Product {
   manufacturingDate: string;
   paymentMethod: string;
   deliveryMethod: string;
-  status: Status;
+  status: StatusEnum;
   stock: number;
   price: number;
 }
 
-enum Status {
+enum StatusEnum {
   Available = "available",
   OutOfStock = "outOfStock",
   Sold = "sold",
@@ -40,14 +41,14 @@ export class ProductService {
 
   @Path(":productId")
   @GET
-  getProductInfo(@PathParam("productId") productId: string): string {
+  getProductInfo(@PathParam("productId") productId: string): Status {
     let product: Product = {
       id: 0,
       name: "example",
       description: "test",
       category: { id: 5, name: "test" },
       photoUrls: [""],
-      status: Status.Available,
+      status: StatusEnum.Available,
       expiryDate: "2020-11-28",
       manufacturingDate: "2020-11-28",
       paymentMethod: "cash",
@@ -55,18 +56,18 @@ export class ProductService {
       price: 0,
       stock: 10,
     };
-    return JSON.stringify(product);
+    return StatusOK;
   }
 
   @Path(":productId")
   @POST
-  updateProductInfo(@PathParam("productId") productId: string): string {
-    return '{"status":"ok"}';
+  updateProductInfo(@PathParam("productId") productId: string): Status {
+    return StatusOK;
   }
 
   @Path(":productId")
   @DELETE
-  deleteProduct(@PathParam("productId") productId: string): string {
-    return '{"status":"ok"}';
+  deleteProduct(@PathParam("productId") productId: string): Status {
+    return StatusOK;
   }
 }
