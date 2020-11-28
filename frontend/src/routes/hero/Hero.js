@@ -16,9 +16,12 @@ export const Hero = () => (
 <<<<<<< HEAD
 			<Button
 				data-testid={'getStartedButton'}
+<<<<<<< HEAD
 =======
 			<Button
 >>>>>>> 4b0fc83... login link
+=======
+>>>>>>> 08a7188... testing button
 				variant='contained'
 				color='primary'
 				href='/login'
