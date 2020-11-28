@@ -6,4 +6,16 @@
 
 	display: flex;
 	align-items: center;
+	justify-content: space-around;
+}
+
+.loginImage {
+	width: 100%;
+	margin: 0 -20em 0 -10em;
+	z-index: 1;
+}
+
+.loginForm {
+	width: 40%;
+	margin: 4em;
 }
