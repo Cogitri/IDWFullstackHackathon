@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -85,3 +86,10 @@ export const LoginForm = ({ initialFormState = 'login' }) => {
 		</Card>
 	);
 };
+=======
+import React from 'react';
+
+import './LoginForm.scss';
+
+export const LoginForm = () => <div data-testid='loginForm'></div>;
+>>>>>>> 7ae3276... assets; WIP: loginPage
