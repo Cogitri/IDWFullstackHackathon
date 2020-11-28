@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import objEqual from '../objEqual';
 
 export const useAuth = () => {
-	// TODO implement
-	const [user] = useState(undefined);
+	const [storedUser] = useState(
+		JSON.parse(localStorage.getItem('user') ?? '{}')
+	);
+	const user = objEqual(storedUser, {}) ? undefined : storedUser;
+
 	return { user };
 };
