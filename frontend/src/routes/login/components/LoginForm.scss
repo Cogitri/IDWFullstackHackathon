@@ -1,9 +1,5 @@
 .loginForm {
 	width: 100%;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c2f6d4d... loginpage
 	height: 60%;
 
 	.cardContent {
@@ -13,21 +9,9 @@
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-<<<<<<< HEAD
-<<<<<<< HEAD
 			justify-content: flex-start;
 		}
 	}
-=======
->>>>>>> c5b749a... WIP: loginpage
-=======
-			justify-content: start;
-=======
-			justify-content: flex-start;
->>>>>>> f2800d7... cleanup
-		}
-	}
->>>>>>> c2f6d4d... loginpage
 }
 
 .actions {
@@ -36,17 +20,12 @@
 	justify-content: center;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c2f6d4d... loginpage
 .loginSignupToggleWrapper {
 	display: flex;
 	justify-content: center;
 }
 
 .sellToggleWrapper {
-<<<<<<< HEAD
 	display: flex;
 	align-items: center;
 }
@@ -54,18 +33,4 @@
 .dimmed {
 	opacity: 50%;
 	cursor: pointer;
-=======
-.form {
-	display: flex;
-	flex-direction: column;
->>>>>>> c5b749a... WIP: loginpage
-=======
-	display: flex;
-	align-items: center;
-}
-
-.dimmed {
-	opacity: 50%;
-	cursor: pointer;
->>>>>>> c2f6d4d... loginpage
 }
