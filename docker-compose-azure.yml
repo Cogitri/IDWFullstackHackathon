@@ -2,19 +2,19 @@ version: '3.7'
 
 services:
   database:
-    image: "${DOCKER_REGISTRY_SERVER_URL}/db_golocal:latest"
+    image: "golocal.azurecr.io/db_golocal:latest"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
   backend:
     container_name: backend
-    image: "${DOCKER_REGISTRY_SERVER_URL}/backend_golocal:latest"
+    image: "golocal.azurecr.io/backend_golocal:latest"
     ports:
       - 8000:8000
     restart: always
   frontend:
     container_name: frontend
-    image: "${DOCKER_REGISTRY_SERVER_URL}/frontend_golocal:latest"
+    image: "golocal.azurecr.io/frontend_golocal:latest"
     ports:
       - 80:80
     restart: always
