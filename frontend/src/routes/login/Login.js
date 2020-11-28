@@ -36,8 +36,8 @@ import { ReactComponent as LoginImage } from '../../assets/undraw_Login_re_4vu2.
 
 export const Login = () => (
 	<div data-testid={'login'} className='login'>
-		<LoginImage />
-		<LoginForm />
+		<LoginImage className='loginImage' />
+		<LoginForm className='loginForm' />
 	</div>
 );
 >>>>>>> 7ae3276... assets; WIP: loginPage

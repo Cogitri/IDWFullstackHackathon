@@ -1,5 +1,6 @@
 .loginForm {
 	width: 100%;
+<<<<<<< HEAD
 	height: 60%;
 
 	.cardContent {
@@ -12,6 +13,8 @@
 			justify-content: flex-start;
 		}
 	}
+=======
+>>>>>>> c5b749a... WIP: loginpage
 }
 
 .actions {
@@ -20,6 +23,7 @@
 	justify-content: center;
 }
 
+<<<<<<< HEAD
 .loginSignupToggleWrapper {
 	display: flex;
 	justify-content: center;
@@ -33,4 +37,9 @@
 .dimmed {
 	opacity: 50%;
 	cursor: pointer;
+=======
+.form {
+	display: flex;
+	flex-direction: column;
+>>>>>>> c5b749a... WIP: loginpage
 }
