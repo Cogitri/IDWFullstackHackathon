@@ -1,5 +1,17 @@
 .loginForm {
 	width: 100%;
+	height: 60%;
+
+	.cardContent {
+		height: 80%;
+
+		.form {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: start;
+		}
+	}
 }
 
 .actions {
@@ -8,7 +20,17 @@
 	justify-content: center;
 }
 
-.form {
+.loginSignupToggleWrapper {
 	display: flex;
-	flex-direction: column;
+	justify-content: center;
+}
+
+.sellToggleWrapper {
+	display: flex;
+	align-items: center;
+}
+
+.dimmed {
+	opacity: 50%;
+	cursor: pointer;
 }
