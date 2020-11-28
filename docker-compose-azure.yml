@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   database:
-    image: mariadb:latest
+    image: "${DOCKER_REGISTRY_SERVER_URL}/db_golocal:latest"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
