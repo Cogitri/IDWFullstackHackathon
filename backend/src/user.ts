@@ -1,14 +1,25 @@
 import { Path, PathParam, QueryParam, GET, POST, PUT } from "typescript-rest";
+import { ProductAndAmount } from "./product";
 
 interface User {
   id: number;
   username: string;
+  passwordHash: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  userStatus: string;
+  longitude: number;
+  latitude: number;
 }
+
+interface Farmer extends User {
+  products: ProductAndAmount[];
+  farmingMethodology: string;
+  covidGuidelines: string;
+}
+
+interface Customer extends User {}
 
 interface Login {
   username: string;
@@ -51,11 +62,13 @@ export class UserService {
     let user: User = {
       id: 0,
       username,
+      passwordHash: "abcd123",
       firstName: "admin",
       lastName: "admin",
       email: "admin@example.org",
       phone: "+490000",
-      userStatus: "admin",
+      longitude: 0,
+      latitude: 0,
     };
     return JSON.stringify(user);
   }

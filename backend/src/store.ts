@@ -1,11 +1,20 @@
 import { Path, GET, PathParam, POST } from "typescript-rest";
+import { ProductAndAmount } from "./product";
 
 interface Order {
   id: number;
-  productId: number;
-  quantity: number;
+  products: ProductAndAmount[];
   orderDate: Date;
-  status: string;
+  status: Status;
+  customerId: number;
+  farmerId: number;
+  totalPrice: number;
+}
+
+enum Status {
+  Placed = "placed",
+  Approved = "approved",
+  Completed = "completed",
 }
 
 @Path("/store")
@@ -21,10 +30,12 @@ export class StoreService {
   getOrderInfo(@PathParam("orderId") orderId: number): string {
     let order: Order = {
       id: orderId,
-      productId: 0,
-      quantity: 1,
+      products: [{ productId: 5, quantity: 3 }],
       orderDate: new Date(),
-      status: "placed",
+      status: Status.Placed,
+      customerId: 5,
+      farmerId: 6,
+      totalPrice: 30,
     };
     return JSON.stringify(order);
   }
