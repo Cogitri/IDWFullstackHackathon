@@ -96,7 +96,7 @@ export const LoginForm = ({ initialFormState = 'login' }) => {
 					type='submit'
 					onClick={handleSubmit}
 				>
-					Signin
+					{formState === 'signup' ? 'Signup' : 'Login'}
 				</Button>
 			</CardActions>
 		</Card>
