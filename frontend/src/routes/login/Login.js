@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import { LoginForm } from './components/LoginForm';
 import { useAuth } from '../../utils/hooks/useAuth';
@@ -22,3 +23,6 @@ export const Login = () => {
 		</div>
 	);
 };
+=======
+export const Login = () => <p>Login works</p>;
+>>>>>>> 002ec46... routing
