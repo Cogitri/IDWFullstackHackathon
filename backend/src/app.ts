@@ -7,11 +7,11 @@ import { UserService } from "./user";
 
 const app = express();
 Server.buildServices(app, ProductService, StoreService, UserService);
-const pool =  mariadb.createPool({
-  host: 'localhost', 
-  user:'root', 
-  password: 'myPassword',
-  connectionLimit: 5
+const pool = mariadb.createPool({
+  host: "localhost",
+  user: "root",
+  password: "myPassword",
+  connectionLimit: 5,
 });
 
 app.listen(8000, function () {

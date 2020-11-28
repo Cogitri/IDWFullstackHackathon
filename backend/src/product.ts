@@ -1,12 +1,32 @@
-import { Path, GET, PathParam, POST, PUT, DELETE } from "typescript-rest";
+import { Path, GET, PathParam, POST, DELETE } from "typescript-rest";
 
 interface Product {
   id: number;
+  category: Category;
   name: string;
   photoUrls: [string];
-  tags: [string];
-  status: string;
+  expiryDate: string;
+  manufacturingDate: string;
+  paymentMethod: string;
+  deliveryMethod: string;
+  status: Status;
   price: number;
+}
+
+enum Status {
+  Available = "available",
+  OutOfStock = "outOfStock",
+  Sold = "sold",
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+export interface ProductAndAmount {
+  productId: number;
+  quantity: number;
 }
 
 @Path("/product")
@@ -22,9 +42,13 @@ export class ProductService {
     let product: Product = {
       id: 0,
       name: "example",
+      category: { id: 5, name: "test" },
       photoUrls: [""],
-      tags: [""],
-      status: "available",
+      status: Status.Available,
+      expiryDate: "2020-11-28",
+      manufacturingDate: "2020-11-28",
+      paymentMethod: "cash",
+      deliveryMethod: "pick-up",
       price: 0,
     };
     return JSON.stringify(product);
