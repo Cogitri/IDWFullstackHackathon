@@ -1,26 +1,17 @@
 import Axios from 'axios-observable';
 import { first, startWith } from 'rxjs/operators';
+import { userLoginResponseDataMock } from '../../constants/mocks';
 
 export const storeLogin = (userData, callback) => {
 	localStorage.setItem('user', JSON.stringify(userData));
-	callback();
+	if (callback) callback();
 };
 
 const login = (username, password, callback) =>
 	Axios.get(`/user/login`, { username, password })
 		.pipe(
 			startWith({
-				data: {
-					id: 1,
-					username: 'b007c',
-					passwordHash: 'hash',
-					firstName: 'alfred',
-					lastName: 'schmidt',
-					email: 'as@gmail.com',
-					phone: '+asdsad',
-					longitude: 100,
-					latitude: 50,
-				},
+				data: userLoginResponseDataMock,
 			}),
 			first()
 		)

@@ -5,7 +5,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import EcoOutlinedIcon from '@material-ui/icons/EcoOutlined';
+import { useAuth } from '../../utils/hooks/useAuth';
+import isFarmer from '../../utils/user/isFarmer';
+import { logout } from '../../utils/auth/logout';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -21,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
 export const Navbar = () => {
 	const classes = useStyles();
+	const { user } = useAuth();
+	const history = useHistory();
 
 	return (
 		<div className={classes.root} data-testid='navbar'>
@@ -32,8 +39,16 @@ export const Navbar = () => {
 					<IconButton color='inherit' href='/farmer'>
 						<EcoOutlinedIcon />
 					</IconButton>
-					<IconButton color='inherit' href='/checkout'>
-						<ShoppingCartOutlinedIcon />
+					{!isFarmer(user) && (
+						<IconButton color='inherit' href='/checkout'>
+							<ShoppingCartOutlinedIcon />
+						</IconButton>
+					)}
+					<IconButton
+						color='inherit'
+						onClick={() => logout(() => history.push('/'))}
+					>
+						<ExitToAppOutlinedIcon />
 					</IconButton>
 				</Toolbar>
 			</AppBar>
