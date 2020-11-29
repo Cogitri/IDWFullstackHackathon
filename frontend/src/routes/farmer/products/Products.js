@@ -10,225 +10,9 @@ import {
 	Grid,
 	makeStyles,
 } from '@material-ui/core';
-
-const productResponseDataMock = [
-	{
-		product: {
-			id: 2,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 20,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 21,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 22,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 23,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 24,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 25,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'carrot',
-			description: 'string',
-			photoUrls: [
-				'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 7,
-	},
-	{
-		product: {
-			id: 4,
-			category: {
-				id: 0,
-				name: 'string',
-			},
-			name: 'beans',
-			description: 'string',
-			photoUrls: [
-				'https://www.healthline.com/hlcmsresource/images/AN_images/AN574-Beans-732x549-thumb.jpg',
-			],
-			tags: [
-				{
-					id: 0,
-					name: 'string',
-				},
-			],
-			expiryDate: 'string',
-			manufacturingDate: 'string',
-			paymentMethod: 'string',
-			deliveryMethod: 'string',
-			status: 'available',
-			price: 5,
-		},
-		amount: 9,
-	},
-];
+import { productResponseDataMock } from '../../../constants/mocks';
+import { addProductToCart } from '../../../utils/state/cart';
+import { addProductToWishlist } from '../../../utils/state/wishlist';
 
 const useStyles = makeStyles((theme) => ({
 	productsWrapper: {
@@ -246,12 +30,12 @@ const useStyles = makeStyles((theme) => ({
 		padding: '2rem',
 	},
 	productCard: {
-		cursor: 'pointer',
 		margin: theme.spacing(2),
 		height: 250,
 		width: 250,
 	},
 	media: {
+		cursor: 'pointer',
 		objectFit: 'center',
 		maxWidth: '100%',
 		maxHeight: '100%',
@@ -265,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 export const Products = () => {
 	const classes = useStyles();
 	const { farmerId } = useParams();
+
 	const productsAndAmounts = useFetch(
 		`/farmer/${farmerId}`,
 		{},
@@ -276,7 +61,6 @@ export const Products = () => {
 	return (
 		<div data-testid='products'>
 			<Navbar />
-
 			{productsAndAmounts && (
 				<div className={classes.productsWrapper}>
 					<Grid container>
@@ -294,11 +78,19 @@ export const Products = () => {
 									/>
 								</CardContent>
 								<CardActions className={classes.actionsWrapper}>
-									<Button size='small' color='primary'>
+									<Button
+										size='small'
+										color='primary'
+										onClick={() => addProductToWishlist({ product, amount: 1 })}
+									>
 										Wish
 									</Button>
 									<p>{product.price}</p>
-									<Button size='small' color='primary'>
+									<Button
+										size='small'
+										color='primary'
+										onClick={() => addProductToCart({ product, amount: 1 })}
+									>
 										Buy
 									</Button>
 								</CardActions>
