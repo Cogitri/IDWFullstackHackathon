@@ -8,7 +8,7 @@ RUN npm run build
 FROM node:current-alpine
 WORKDIR /usr/src/app
 COPY --from=builder /build/ormconfig.json /build/package*.json /build/dist/ ./
-RUN npm install --only=prod
+RUN sed 's|dist/||' -i ormconfig.json && npm install --only=prod
 COPY --from=builder /build/exe /usr/local/bin/exe
 RUN chmod +x /usr/local/bin/exe
 
