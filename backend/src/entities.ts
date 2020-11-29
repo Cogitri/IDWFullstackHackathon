@@ -36,9 +36,6 @@ export class Orders {
   id: number;
 
   @Column()
-  quanity: number;
-
-  @Column()
   status: string;
 
   @Column("float")

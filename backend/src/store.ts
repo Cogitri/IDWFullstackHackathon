@@ -12,7 +12,6 @@ import {
 } from "typescript-rest";
 import { ProductAndAmount } from "./product";
 import express from "express";
-import { resolve } from "path";
 import { DbConnection } from "./server";
 import * as Entities from "./entities";
 
@@ -40,10 +39,7 @@ export class StoreService {
   @Path("/order")
   @POST
   @Security()
-  placeOrder(
-    newOrder: Order,
-    @ContextRequest request: express.Request
-  ): Promise<Return.NewResource<void>> {
+  placeOrder(newOrder: Order): Promise<Return.NewResource<void>> {
     return new Promise<Return.NewResource<void>>((resolve, reject) => {
       let order = new Entities.Orders();
 
