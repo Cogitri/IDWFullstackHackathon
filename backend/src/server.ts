@@ -6,6 +6,7 @@ import { StoreService } from "./store";
 import { UserService } from "./user";
 import * as passport_jwt from "passport-jwt";
 import * as http from "http";
+var cors = require("cors");
 import { sign } from "jsonwebtoken";
 import { createConnection } from "typeorm";
 import * as mysql from "mysql";
@@ -21,6 +22,7 @@ export class ApiServer {
   constructor() {
     this.app = express();
     this.configureJWT();
+    this.app.use(cors());
     Server.buildServices(this.app, ProductService, StoreService, UserService);
 
     this.configureErrors();
