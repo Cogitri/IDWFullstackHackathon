@@ -24,14 +24,10 @@ describe("GET /user", () => {
       });
   });
 
-  it("should return 200 & logut the user", async (done) => {
+  it("should return 204 & log the user out", async (done) => {
     request(app)
       .get("/user/logout")
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
+      .expect(204)
       .end(function (err, res) {
         if (err) {
           throw err;
@@ -42,17 +38,13 @@ describe("GET /user", () => {
 });
 
 describe("POST /user", () => {
-  it("should return 200 & create user", async (done) => {
+  it("should return 201 & create user", async (done) => {
     request(app)
       .post("/user")
       .send(
         '{"id": 0, "username": "admin", "passwordHash": "abcd123", "firstName": "admin", "lastName": "admin", "email": "admin@example.org","phone": "+490000", "longitude": 0, "latitude": 0, "isFarmer": false}'
       )
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
+      .expect(201)
       .end(function (err, res) {
         if (err) {
           throw err;
@@ -65,11 +57,7 @@ describe("POST /user", () => {
     request(app)
       .post("/user/login")
       .send('{"username": "admin", "password": "admin12345"}')
-      .expect("Content-Type", /json/)
       .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
       .end(function (err, res) {
         if (err) {
           throw err;
@@ -82,15 +70,11 @@ describe("POST /user", () => {
 describe("PUT /user", () => {
   it("should return 200 & update user", async (done) => {
     request(app)
-      .post("/user")
+      .put("/user")
       .send(
         '{"id": 0, "username": "admin", "passwordHash": "abcd123", "firstName": "admin", "lastName": "admin", "email": "admin@example.org","phone": "+490000", "longitude": 0, "latitude": 0, "isFarmer": false}'
       )
-      .expect("Content-Type", /json/)
       .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
       .end(function (err, res) {
         if (err) {
           throw err;

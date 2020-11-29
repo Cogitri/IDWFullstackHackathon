@@ -26,17 +26,13 @@ describe("GET /store", () => {
 });
 
 describe("POST /store", () => {
-  it("should return 200 & place order", async (done) => {
+  it("should return 201 & place order", async (done) => {
     request(app)
       .post("/store/order")
       .send(
         '{ "id": 25, "products": [{ "productId": 5, "quantity": 3 }], "orderDate": "", "status": "placed", "customerId": 5, "farmerId": 6, "totalPrice": 30}'
       )
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
+      .expect(201)
       .end(function (err, res) {
         if (err) {
           throw err;
