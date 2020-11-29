@@ -1,24 +1,52 @@
 import express from "express";
 import mariadb from "mariadb";
-import { PassportAuthenticator, Server } from "typescript-rest";
+import { PassportAuthenticator, Server, Errors } from "typescript-rest";
 import { ProductService } from "./product";
 import { StoreService } from "./store";
 import { UserService } from "./user";
-import { StrategyOptions, ExtractJwt, Strategy } from "passport-jwt";
+import * as passport_jwt from "passport-jwt";
 import * as http from "http";
+import { sign } from "jsonwebtoken";
 import { createConnection } from "typeorm";
 import * as mysql from "mysql";
 
+const JWT_SECRET: string =
+  "kohjee5ahcoo6shuSuuthohkiejeSh1voKohchahgh1iequ7eenu2ahba3Geingo";
+
 export class ApiServer {
   public PORT: number = 8000;
-  private JWT_SECRET: string =
-    "kohjee5ahcoo6shuSuuthohkiejeSh1voKohchahgh1iequ7eenu2ahba3Geingo";
   private readonly app: express.Application;
   private server: http.Server = null;
 
   constructor() {
     this.app = express();
+    this.configureJWT();
     Server.buildServices(this.app, ProductService, StoreService, UserService);
+
+    this.configureErrors();
+  }
+
+  private configureErrors() {
+    this.app.use(
+      (
+        err: any,
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) => {
+        if (err instanceof Errors.BadRequestError) {
+          if (res.headersSent) {
+            // important to allow default error handler to close connection if headers already sent
+            return next(err);
+          }
+          res.set("Content-Type", "application/json");
+          res.status(err.statusCode);
+          res.json({ error: err.message, code: err.statusCode });
+        } else {
+          next(err);
+        }
+      }
+    );
   }
 
   public async start() {
@@ -67,12 +95,12 @@ export class ApiServer {
   }
 
   private configureJWT() {
-    const jwtConfig: StrategyOptions = {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: Buffer.from(this.JWT_SECRET, "base64"),
+    const jwtConfig: passport_jwt.StrategyOptions = {
+      jwtFromRequest: passport_jwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: Buffer.from(JWT_SECRET, "base64"),
     };
 
-    const strategy = new Strategy(
+    const strategy = new passport_jwt.Strategy(
       jwtConfig,
       (payload: any, done: (err: any, user: any) => void) => {
         done(null, payload);
@@ -85,5 +113,9 @@ export class ApiServer {
       },
     });
     Server.registerAuthenticator(authenticator);
+  }
+
+  public static generateJWTToken(obj: any): string {
+    return sign(obj, JWT_SECRET);
   }
 }

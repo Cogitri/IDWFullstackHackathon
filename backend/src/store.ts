@@ -7,6 +7,7 @@ import {
   ServiceContext,
   Return,
   ContextRequest,
+  Security,
 } from "typescript-rest";
 import { ProductAndAmount } from "./product";
 import express from "express";
@@ -34,6 +35,7 @@ export class StoreService {
 
   @Path("/order")
   @POST
+  @Security()
   placeOrder(
     order: Order,
     @ContextRequest request: express.Request
@@ -43,6 +45,7 @@ export class StoreService {
 
   @Path("/order/:orderId")
   @GET
+  @Security()
   getOrderInfo(@PathParam("orderId") orderId: number): Order {
     let order: Order = {
       id: orderId,
