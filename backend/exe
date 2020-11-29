@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# HACKY HACKY HACKY: MariaDB needs a few secs until it has completed setup and can accept connections 
+sleep 10 && node app.js

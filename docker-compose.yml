@@ -5,13 +5,17 @@ services:
     image: mariadb:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: golocal
+      MYSQL_USER: golocal
+      MYSQL_PASSWORD: Ii5mie8kiequ9XahcohRai5eihioBooy
   backend:
     container_name: backend
     build: ./backend
-    ports:
-      - 8000:8000
     restart: always
+    command: /usr/local/bin/exe
+    depends_on:
+      - database
   frontend:
     container_name: frontend
     build: ./frontend

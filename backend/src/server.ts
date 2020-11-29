@@ -9,7 +9,6 @@ import * as http from "http";
 var cors = require("cors");
 import { sign } from "jsonwebtoken";
 import { createConnection } from "typeorm";
-import * as mysql from "mysql";
 
 const JWT_SECRET: string =
   "kohjee5ahcoo6shuSuuthohkiejeSh1voKohchahgh1iequ7eenu2ahba3Geingo";
@@ -76,17 +75,6 @@ export class ApiServer {
   }
 
   private async setupDb() {
-    {
-      const dummyCon = mysql.createConnection({
-        host: "localhost",
-        user: "idw",
-        password: "123456",
-      });
-
-      await dummyCon.connect();
-      await dummyCon.query("CREATE DATABASE IF NOT EXISTS `golocal`");
-    }
-
     const db = await createConnection();
     console.log(
       "Database connection created, creating DB if it doens't exist yet..."
