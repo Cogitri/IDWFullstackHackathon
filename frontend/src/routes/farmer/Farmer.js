@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { userResponseDataMock } from '../../constants/mocks';
+import { apiURL } from '../../constants/apiUrl';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const Farmer = () => {
 	const classes = useStyles();
-	const user = useFetch('/user', {}, userResponseDataMock).data;
+	const user = useFetch(`${apiURL}/user`, {}, userResponseDataMock).data;
 	const history = useHistory();
 
 	return (

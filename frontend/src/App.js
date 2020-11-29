@@ -10,10 +10,12 @@ import { Products } from './routes/farmer/products/Products';
 import { Checkout } from './routes/checkout/Checkout';
 import './App.scss';
 import theme from './theme';
+import { SnackbarContainer } from 'uno-material-ui';
 
 export const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
+			<SnackbarContainer />
 			<BrowserRouter>
 				<Switch>
 					<ProtectedRoute path='/checkout' component={Checkout} />
