@@ -1,9 +1,10 @@
 import express from "express";
 import mariadb from "mariadb";
-import { Server } from "typescript-rest";
+import { PassportAuthenticator, Server } from "typescript-rest";
 import { ProductService } from "./product";
 import { StoreService } from "./store";
 import { UserService } from "./user";
+import { StrategyOptions, ExtractJwt, Strategy } from "passport-jwt";
 import * as http from "http";
 
 export class ApiServer {
@@ -20,6 +21,7 @@ export class ApiServer {
 
   public async start() {
     //await this.connectDB();
+    this.configureJWT();
     return new Promise<void>((resolve, reject) => {
       this.server = this.app.listen(this.PORT, function () {
         console.log("Listening to http://127.0.0.1:8000");
@@ -48,5 +50,26 @@ export class ApiServer {
       password: "myPassword",
       connectionLimit: 5,
     });
+  }
+
+  private configureJWT() {
+    const jwtConfig: StrategyOptions = {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: Buffer.from(this.JWT_SECRET, "base64"),
+    };
+
+    const strategy = new Strategy(
+      jwtConfig,
+      (payload: any, done: (err: any, user: any) => void) => {
+        done(null, payload);
+      }
+    );
+    const authenticator = new PassportAuthenticator(strategy, {
+      deserializeUser: (user: string) => JSON.parse(user),
+      serializeUser: (user: any) => {
+        return JSON.stringify(user);
+      },
+    });
+    Server.registerAuthenticator(authenticator);
   }
 }
