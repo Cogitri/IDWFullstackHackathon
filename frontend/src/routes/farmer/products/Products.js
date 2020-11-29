@@ -13,6 +13,7 @@ import {
 import { productResponseDataMock } from '../../../constants/mocks';
 import { addProductToCart } from '../../../utils/state/cart';
 import { addProductToWishlist } from '../../../utils/state/wishlist';
+import { apiURL } from '../../../constants/apiUrl';
 
 const useStyles = makeStyles((theme) => ({
 	productsWrapper: {
@@ -51,7 +52,7 @@ export const Products = () => {
 	const { farmerId } = useParams();
 
 	const productsAndAmounts = useFetch(
-		`/farmer/${farmerId}`,
+		`${apiURL}/product/${farmerId}`,
 		{},
 		productResponseDataMock
 	).data;

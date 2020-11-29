@@ -1,3 +1,1 @@
-const apiURL = 'apiURL'; // TODO
-
-export default apiURL;
+export const apiURL = 'http://localhost:8000';

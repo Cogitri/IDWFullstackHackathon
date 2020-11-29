@@ -1,3 +1,5 @@
+export const allowMocks = false;
+
 export const productResponseDataMock = [
 	{
 		product: {
@@ -226,6 +228,7 @@ export const userResponseDataMock = [
 		lastName: 'schmidt',
 		email: 'as@gmail.com',
 		phone: '+asdsad',
+		isFarmer: true,
 		longitude: 1,
 		latitude: 2,
 		farmingMethodoligy: 'i hate farming',
@@ -253,6 +256,7 @@ export const userResponseDataMock = [
 		firstName: 'alfred3',
 		lastName: 'schmidt',
 		email: 'as@gmail.com',
+		isFarmer: true,
 		phone: '+asdsad',
 		longitude: 6,
 		latitude: 5,
@@ -276,7 +280,7 @@ export const userResponseDataMock = [
 	},
 ];
 
-export const userLoginResponseDataMock = {
+export const userLoginResponseDataMockOld = {
 	id: 1,
 	username: 'b007c',
 	passwordHash: 'hash',
@@ -288,6 +292,9 @@ export const userLoginResponseDataMock = {
 	latitude: 50,
 };
 
+export const userLoginResponseDataMock =
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwidXNlcm5hbWUiOiIiLCJwYXNzd29yZEhhc2giOiJhYmNkMTIzIiwiZmlyc3ROYW1lIjoiYWRtaW4iLCJsYXN0TmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLm9yZyIsInBob25lIjoiKzQ5MDAwMCIsImxvbmdpdHVkZSI6MCwibGF0aXR1ZGUiOjAsImlzRmFybWVyIjpmYWxzZSwiaWF0IjoxNjA2NjU5NDYyfQ.Es-YKNpEO3hW3kuqeyJUCu44xblAOWN7z4ye04M2LP8';
+
 export const userRegisterResponseDataMock = {
 	id: 1,
 	username: 'b007c',
@@ -295,6 +302,7 @@ export const userRegisterResponseDataMock = {
 	firstName: 'alfred',
 	lastName: 'schmidt',
 	email: 'as@gmail.com',
+	isFarmer: true,
 	phone: '+asdsad',
 	products: [{ products: '1', amount: 5 }],
 	longitude: 100,

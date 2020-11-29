@@ -1,9 +1,10 @@
 import { Button, makeStyles } from '@material-ui/core';
 import Axios from 'axios-observable';
 import React, { useEffect, useState } from 'react';
-import { first, startWith } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { Navbar } from '../../components/navbar/Navbar';
-import { userResponseDataMock } from '../../constants/mocks';
+import { allowMocks, userResponseDataMock } from '../../constants/mocks';
 import useFetch from '../../utils/hooks/useFetch';
 import {
 	getProductsFromStorage,
@@ -15,6 +16,8 @@ import {
 } from '../../utils/state/wishlist';
 import isFarmer from '../../utils/user/isFarmer';
 import { ProductList } from './components/ProductList';
+import { apiURL } from '../../constants/apiUrl';
+import { snackbarService } from 'uno-material-ui';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -39,7 +42,7 @@ export const Checkout = () => {
 		getWishlistProductsFromStorage
 	);
 	const [farmerCovidGuideline, setFarmerCovidGuideline] = useState(undefined);
-	const user = useFetch('/user', {}, userResponseDataMock).data;
+	const user = useFetch(`${apiURL}/user`, {}, userResponseDataMock).data;
 
 	useEffect(() => {
 		if (!productsInCart.length || !user) return;
@@ -55,17 +58,29 @@ export const Checkout = () => {
 		if (!farmerOfProduct)
 			return console.warn('Error: farmer not found', 'should not occur');
 
-		Axios.get(`user/${farmerOfProduct.username}`)
-			.pipe(
-				startWith({
-					data: userResponseDataMock[0],
-				}),
-				first()
-			)
-			.subscribe(
-				({ data }) => setFarmerCovidGuideline(data.covidGuidelines),
-				(error) => console.warn('farmerCovidGuidelineFetchError', error)
-			);
+		const mockResult = userResponseDataMock[0];
+
+		const shouldUseMock = true;
+
+		const willUseMockData =
+			mockResult !== undefined && shouldUseMock && allowMocks;
+
+		const $fetch = willUseMockData
+			? of({ data: mockResult })
+			: Axios.get(`${apiURL}/user/${farmerOfProduct.username}`, {
+					headers: { jwt: localStorage.getItem('jwt') },
+			  });
+
+		$fetch.pipe(first()).subscribe(
+			({ data }) => setFarmerCovidGuideline(data.covidGuidelines),
+			(error) => {
+				snackbarService.showSnackbar(
+					`Error ${JSON.stringify(error.message)}`,
+					'error'
+				);
+				console.warn('farmerCovidGuidelineFetchError', error);
+			}
+		);
 	}, [productsInCart, user]);
 
 	const handleProductClick = (indexClicked) => {

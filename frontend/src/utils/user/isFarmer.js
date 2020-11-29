@@ -1,3 +1,3 @@
-const isFarmer = (user) => user?.hasOwnProperty('products');
+const isFarmer = (user) => user?.isFarmer === true;
 
 export default isFarmer;
