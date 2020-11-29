@@ -6,6 +6,7 @@ import {
   DELETE,
   Return,
   ContextRequest,
+  Security,
 } from "typescript-rest";
 import express from "express";
 
@@ -43,6 +44,7 @@ export interface ProductAndAmount {
 @Path("/product")
 export class ProductService {
   @POST
+  @Security()
   addNewProduct(
     product: Product,
     @ContextRequest request: express.Request
@@ -52,6 +54,7 @@ export class ProductService {
 
   @Path(":productId")
   @GET
+  @Security()
   getProductInfo(@PathParam("productId") productId: number): Product {
     let product: Product = {
       id: 0,
@@ -72,5 +75,6 @@ export class ProductService {
 
   @Path(":productId")
   @DELETE
+  @Security()
   deleteProduct(@PathParam("productId") productId: number): void {}
 }

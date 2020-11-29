@@ -10,9 +10,11 @@ import {
   Errors,
   Return,
   ContextRequest,
+  Security,
 } from "typescript-rest";
 import { ProductAndAmount } from "./product";
 import express from "express";
+import { ApiServer } from "./server";
 
 interface User {
   id: number;
@@ -44,39 +46,56 @@ export class UserService {
   createUser(
     createdUser: User,
     @ContextRequest request: express.Request
-  ): Return.NewResource<void> {
-    return new Return.NewResource<void>(request.url + "/" + createdUser.id);
+  ): Promise<Return.NewResource<User>> {
+    return new Promise<Return.NewResource<User>>(function (resolve, reject) {
+      // create new user
+
+      // data is valid
+      if (true) {
+        resolve(
+          new Return.NewResource<User>(
+            request.url + "/" + createdUser.id,
+            createdUser
+          )
+        );
+      } else {
+        reject(new Errors.BadRequestError("bad username or password"));
+      }
+    });
   }
 
   @Path("/login")
   @POST
-  loginUser(login: Login): User {
-    // Check if the following parameters match the database entries
-    // login.username && login.password
-    // true -> return '{"status":"ok"}';
-    // false -> return '{"status":"err"}';
-    // Placeholder until database is set up
-    let user: User = {
-      id: 0,
-      username: "admin",
-      passwordHash: "abcd123",
-      firstName: "admin",
-      lastName: "admin",
-      email: "admin@example.org",
-      phone: "+490000",
-      longitude: 0,
-      latitude: 0,
-      isFarmer: false,
-    };
-    return user;
+  async loginUser(login: Login): Promise<any> {
+    return new Promise<any>(function (resolve, reject) {
+      if (login.username == login.password) {
+        let user: User = {
+          id: 0,
+          username: login.username,
+          passwordHash: "abcd123",
+          firstName: "admin",
+          lastName: "admin",
+          email: "admin@example.org",
+          phone: "+490000",
+          longitude: 0,
+          latitude: 0,
+          isFarmer: false,
+        };
+        resolve(ApiServer.generateJWTToken(user));
+      } else {
+        reject(new Errors.BadRequestError("bad username or password"));
+      }
+    });
   }
 
   @Path("/logout")
   @GET
+  @Security()
   logoutUser(@QueryParam("username") username: string): void {}
 
   @Path(":username")
   @GET
+  @Security()
   getUserInfo(@PathParam("username") username: string): User {
     // Placeholder until database is set up
     try {
@@ -99,6 +118,7 @@ export class UserService {
   }
 
   @PUT
+  @Security()
   editUserInfo(editedUser: User): User {
     try {
       let user: User = {
