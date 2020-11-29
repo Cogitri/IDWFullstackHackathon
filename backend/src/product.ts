@@ -52,7 +52,7 @@ export class ProductService {
 
   @Path(":productId")
   @GET
-  getProductInfo(@PathParam("productId") productId: string): Product {
+  getProductInfo(@PathParam("productId") productId: number): Product {
     let product: Product = {
       id: 0,
       name: "example",
@@ -72,5 +72,5 @@ export class ProductService {
 
   @Path(":productId")
   @DELETE
-  deleteProduct(@PathParam("productId") productId: string): void {}
+  deleteProduct(@PathParam("productId") productId: number): void {}
 }
