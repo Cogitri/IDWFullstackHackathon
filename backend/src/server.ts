@@ -8,10 +8,28 @@ import * as passport_jwt from "passport-jwt";
 import * as http from "http";
 var cors = require("cors");
 import { sign } from "jsonwebtoken";
-import { createConnection } from "typeorm";
+import { createConnection, Connection } from "typeorm";
 
 const JWT_SECRET: string =
   "kohjee5ahcoo6shuSuuthohkiejeSh1voKohchahgh1iequ7eenu2ahba3Geingo";
+
+export class DbConnection {
+  private static instance: Connection;
+
+  private constructor() {}
+
+  public static getInstance(): Connection {
+    if (DbConnection.instance == null) {
+      throw new Error("ABORT");
+    }
+
+    return DbConnection.instance;
+  }
+
+  public static setInstance(c: Connection) {
+    DbConnection.instance = c;
+  }
+}
 
 export class ApiServer {
   public PORT: number = 8000;
@@ -75,12 +93,13 @@ export class ApiServer {
   }
 
   private async setupDb() {
-    const db = await createConnection();
+    const dbConnection = await createConnection();
     console.log(
       "Database connection created, creating DB if it doens't exist yet..."
     );
-    await db.query("CREATE DATABASE IF NOT EXISTS `golocal`");
-    await db.query("USE `golocal`");
+    await dbConnection.query("CREATE DATABASE IF NOT EXISTS `golocal`");
+    await dbConnection.query("USE `golocal`");
+    DbConnection.setInstance(dbConnection);
     console.log("Done creating database!");
   }
 

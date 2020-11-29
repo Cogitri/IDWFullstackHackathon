@@ -14,7 +14,8 @@ import {
 } from "typescript-rest";
 import { ProductAndAmount, ProductStock, StatusEnum } from "./product";
 import express from "express";
-import { ApiServer } from "./server";
+import { ApiServer, DbConnection } from "./server";
+import * as Entities from "./entities";
 
 interface User {
   id: number;
@@ -43,81 +44,93 @@ export class UserService {
   context: ServiceContext;
 
   @POST
-  createUser(
-    createdUser: User,
-    @ContextRequest request: express.Request
-  ): Promise<Return.NewResource<User>> {
-    return new Promise<Return.NewResource<User>>(function (resolve, reject) {
-      // create new user
+  createUser(createdUser: User): Promise<Return.NewResource<User>> {
+    return new Promise<Return.NewResource<User>>((resolve, reject) => {
+      let user = new Entities.Users();
+      user.username = createdUser.username;
+      user.passwordHash = createdUser.passwordHash;
+      user.firstName = createdUser.firstName;
+      user.lastName = createdUser.lastName;
+      user.email = createdUser.email;
+      user.phone = createdUser.phone;
+      user.longitude = createdUser.longitude;
+      user.latitude = createdUser.latitude;
+      user.licensed = createdUser.isFarmer;
 
-      // data is valid
-      if (true) {
-        resolve(
-          new Return.NewResource<User>(
-            request.url + "/" + createdUser.id,
-            createdUser
-          )
-        );
-      } else {
-        reject(new Errors.BadRequestError("bad username or password"));
+      if (createdUser.isFarmer) {
+        user.farmingMethodology = createdUser.farmingMethodology;
+        user.covidGuidelines = createdUser.covidGuidelines;
       }
+
+      DbConnection.getInstance()
+        .manager.save(user)
+        .then((user) => {
+          resolve(
+            new Return.NewResource<User>(
+              this.context.request.url + "/" + user.id,
+              createdUser
+            )
+          );
+        })
+        .catch((e) => {
+          reject(new Errors.BadRequestError("Failed to create user: " + e));
+        });
     });
   }
 
   @GET
-  getAllUsers(): Promise<User[]> {
-    return new Promise<User[]>(function (resolve, reject) {
-      resolve([
-        {
-          id: 0,
-          username: "admin",
-          passwordHash: "abcd123",
-          firstName: "admin",
-          lastName: "admin",
-          email: "admin@example.org",
-          phone: "+490000",
-          longitude: 0,
-          latitude: 0,
-          isFarmer: false,
-        },
-      ]);
+  getAllUsers(): Promise<Entities.Users[]> {
+    return new Promise<Entities.Users[]>((resolve, reject) => {
+      DbConnection.getInstance()
+        .manager.find(Entities.Users)
+        .then((users) => {
+          resolve(users);
+        })
+        .catch((e) => {
+          reject(new Errors.BadRequestError("Failed to list users: " + e));
+        });
     });
   }
 
   @Path("/products/:username")
   @GET
-  getAllProductsOfUser(): Promise<ProductStock[]> {
-    return new Promise<ProductStock[]>(function (resolve, reject) {
-      resolve([
-        {
-          product: {
-            id: 2,
-            category: {
-              id: 0,
-              name: "string",
-            },
-            name: "carrot",
-            description: "string",
-            photoUrls: [
-              "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
-            ],
-            tags: [
-              {
-                id: 0,
-                name: "string",
-              },
-            ],
-            expiryDate: "string",
-            manufacturingDate: "string",
-            paymentMethod: "string",
-            deliveryMethod: "string",
-            status: StatusEnum.Available,
-            price: 5,
+  async getAllProductsOfUser() {
+    let products = await DbConnection.getInstance().manager.find(
+      Entities.Products
+    );
+    let arr: ProductStock[];
+    for (let i = 0; i < products.length; i++) {
+      let product = products[i];
+      let category = await DbConnection.getInstance().manager.findOne(
+        Entities.Categories,
+        product.category_id
+      );
+      arr.push({
+        amount: product.stock,
+        product: {
+          id: product.id,
+          expiryDate: product.expiryDate.toISOString(),
+          category: {
+            id: category.id,
+            name: category.category_name,
           },
-          amount: 7,
+          name: product.productname,
+          description: product.description,
+          manufacturingDate: product.manufacturingDate.toISOString(),
+          paymentMethod: product.paymentMethod,
+          deliveryMethod: product.deliveryMethod,
+          status:
+            StatusEnum[
+              product.status.charAt(0).toUpperCase() + product.status.slice(1)
+            ],
+          price: product.price,
+          tags: [],
+          photoUrls: [],
         },
-      ]);
-    });
+      });
+    }
+
+    return arr;
   }
 
   @Path("/login")
@@ -152,25 +165,37 @@ export class UserService {
   @Path(":username")
   @GET
   @Security()
-  getUserInfo(@PathParam("username") username: string): User {
-    // Placeholder until database is set up
-    try {
-      let user: User = {
-        id: 0,
-        username: username,
-        passwordHash: "abcd123",
-        firstName: "admin",
-        lastName: "admin",
-        email: "admin@example.org",
-        phone: "+490000",
-        longitude: 0,
-        latitude: 0,
-        isFarmer: false,
-      };
-      return user;
-    } catch (error) {
-      throw new Errors.BadRequestError();
-    }
+  getUserInfo(@PathParam("username") username: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      DbConnection.getInstance()
+        .manager.find(Entities.Users)
+        .then((users) => {
+          for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            if (user.username == username) {
+              resolve({
+                id: user.id,
+                username: user.username,
+                passwordHash: user.passwordHash,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                longitude: user.longitude,
+                latitude: user.latitude,
+                isFarmer: user.licensed,
+                farmingMethodology: user.farmingMethodology,
+                covidGuidelines: user.covidGuidelines,
+              });
+              return;
+            }
+          }
+          reject(new Errors.BadRequestError("No such user"));
+        })
+        .catch((e) => {
+          reject(new Errors.BadRequestError("Failed to search for user: " + e));
+        });
+    });
   }
 
   @PUT
