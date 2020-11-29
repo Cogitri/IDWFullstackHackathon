@@ -6,6 +6,8 @@ import { StoreService } from "./store";
 import { UserService } from "./user";
 import { StrategyOptions, ExtractJwt, Strategy } from "passport-jwt";
 import * as http from "http";
+import { createConnection } from "typeorm";
+import * as mysql from "mysql";
 
 export class ApiServer {
   public PORT: number = 8000;
@@ -20,7 +22,7 @@ export class ApiServer {
   }
 
   public async start() {
-    //await this.connectDB();
+    await this.setupDb();
     this.configureJWT();
     return new Promise<void>((resolve, reject) => {
       this.server = this.app.listen(this.PORT, function () {
@@ -43,13 +45,25 @@ export class ApiServer {
     });
   }
 
-  private async connectDB() {
-    const pool = mariadb.createPool({
-      host: "localhost",
-      user: "root",
-      password: "myPassword",
-      connectionLimit: 5,
-    });
+  private async setupDb() {
+    {
+      const dummyCon = mysql.createConnection({
+        host: "localhost",
+        user: "idw",
+        password: "123456",
+      });
+
+      await dummyCon.connect();
+      await dummyCon.query("CREATE DATABASE IF NOT EXISTS `golocal`");
+    }
+
+    const db = await createConnection();
+    console.log(
+      "Database connection created, creating DB if it doens't exist yet..."
+    );
+    await db.query("CREATE DATABASE IF NOT EXISTS `golocal`");
+    await db.query("USE `golocal`");
+    console.log("Done creating database!");
   }
 
   private configureJWT() {
