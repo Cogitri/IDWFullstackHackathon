@@ -10,7 +10,12 @@ import {
 } from "typescript-rest";
 import express from "express";
 
-interface Product {
+export interface Tag {
+  id: number;
+  name: string;
+}
+
+export interface Product {
   id: number;
   category: Category;
   name: string;
@@ -21,11 +26,16 @@ interface Product {
   paymentMethod: string;
   deliveryMethod: string;
   status: StatusEnum;
-  stock: number;
   price: number;
+  tags: Tag[];
 }
 
-enum StatusEnum {
+export interface ProductStock {
+  product: Product;
+  amount: number;
+}
+
+export enum StatusEnum {
   Available = "available",
   OutOfStock = "outOfStock",
   Sold = "sold",
@@ -55,20 +65,23 @@ export class ProductService {
   @Path(":productId")
   @GET
   @Security()
-  getProductInfo(@PathParam("productId") productId: number): Product {
-    let product: Product = {
-      id: 0,
-      name: "example",
-      description: "test",
-      category: { id: 5, name: "test" },
-      photoUrls: [""],
-      status: StatusEnum.Available,
-      expiryDate: "2020-11-28",
-      manufacturingDate: "2020-11-28",
-      paymentMethod: "cash",
-      deliveryMethod: "pick-up",
-      price: 0,
-      stock: 10,
+  getProductInfo(@PathParam("productId") productId: number): ProductStock {
+    let product: ProductStock = {
+      product: {
+        id: productId,
+        name: "example",
+        description: "test",
+        category: { id: 5, name: "test" },
+        photoUrls: [""],
+        status: StatusEnum.Available,
+        expiryDate: "2020-11-28",
+        manufacturingDate: "2020-11-28",
+        paymentMethod: "cash",
+        deliveryMethod: "pick-up",
+        tags: [],
+        price: 0,
+      },
+      amount: 10,
     };
     return product;
   }

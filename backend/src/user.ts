@@ -12,7 +12,7 @@ import {
   ContextRequest,
   Security,
 } from "typescript-rest";
-import { ProductAndAmount } from "./product";
+import { ProductAndAmount, ProductStock, StatusEnum } from "./product";
 import express from "express";
 import { ApiServer } from "./server";
 
@@ -61,6 +61,62 @@ export class UserService {
       } else {
         reject(new Errors.BadRequestError("bad username or password"));
       }
+    });
+  }
+
+  @GET
+  getAllUsers(): Promise<User[]> {
+    return new Promise<User[]>(function (resolve, reject) {
+      resolve([
+        {
+          id: 0,
+          username: "admin",
+          passwordHash: "abcd123",
+          firstName: "admin",
+          lastName: "admin",
+          email: "admin@example.org",
+          phone: "+490000",
+          longitude: 0,
+          latitude: 0,
+          isFarmer: false,
+        },
+      ]);
+    });
+  }
+
+  @Path("/products/:username")
+  @GET
+  getAllProductsOfUser(): Promise<ProductStock[]> {
+    return new Promise<ProductStock[]>(function (resolve, reject) {
+      resolve([
+        {
+          product: {
+            id: 2,
+            category: {
+              id: 0,
+              name: "string",
+            },
+            name: "carrot",
+            description: "string",
+            photoUrls: [
+              "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+            ],
+            tags: [
+              {
+                id: 0,
+                name: "string",
+              },
+            ],
+            expiryDate: "string",
+            manufacturingDate: "string",
+            paymentMethod: "string",
+            deliveryMethod: "string",
+            status: StatusEnum.Available,
+            price: 5,
+          },
+          amount: 7,
+        },
+      ]);
     });
   }
 
