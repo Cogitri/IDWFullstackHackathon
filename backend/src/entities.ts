@@ -35,10 +35,6 @@ export class Orders {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Products)
-  @JoinColumn()
-  product_id: number;
-
   @Column()
   quanity: number;
 
@@ -48,6 +44,9 @@ export class Orders {
   @Column("float")
   total_price: number;
 
+  @Column("datetime")
+  order_date: Date;
+
   @OneToOne(() => Users)
   @JoinColumn()
   customer_id: number;
@@ -55,6 +54,23 @@ export class Orders {
   @OneToOne(() => Users)
   @JoinColumn()
   farmer_id: number;
+}
+
+@Entity()
+export class OrderedProducts {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @OneToOne(() => Orders)
+  @JoinColumn()
+  order_id: number;
+
+  @OneToOne(() => Products)
+  @JoinColumn()
+  product_id: number;
+
+  @Column()
+  quantity: number;
 }
 
 @Entity()

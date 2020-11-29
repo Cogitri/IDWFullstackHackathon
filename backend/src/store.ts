@@ -8,9 +8,13 @@ import {
   Return,
   ContextRequest,
   Security,
+  Errors,
 } from "typescript-rest";
 import { ProductAndAmount } from "./product";
 import express from "express";
+import { resolve } from "path";
+import { DbConnection } from "./server";
+import * as Entities from "./entities";
 
 interface Order {
   id: number;
@@ -37,10 +41,37 @@ export class StoreService {
   @POST
   @Security()
   placeOrder(
-    order: Order,
+    newOrder: Order,
     @ContextRequest request: express.Request
-  ): Return.NewResource<void> {
-    return new Return.NewResource<void>(request.url + "/" + order.id);
+  ): Promise<Return.NewResource<void>> {
+    return new Promise<Return.NewResource<void>>((resolve, reject) => {
+      let order = new Entities.Orders();
+
+      order.id = newOrder.id;
+      order.customer_id = newOrder.customerId;
+      order.farmer_id = newOrder.farmerId;
+      order.order_date = newOrder.orderDate;
+      order.status = newOrder.status;
+      order.total_price = newOrder.totalPrice;
+
+      newOrder.products.forEach((product) => {
+        let orderedProduct = new Entities.OrderedProducts();
+        orderedProduct.order_id = newOrder.id;
+        orderedProduct.quantity = product.quantity;
+        orderedProduct.product_id = product.productId;
+      });
+
+      DbConnection.getInstance()
+        .manager.save(order)
+        .then((order) => {
+          resolve(
+            new Return.NewResource<void>(
+              this.context.request.url + "/" + order.id
+            )
+          );
+        })
+        .catch((e) => reject(new Errors.BadRequestError("Invalid order" + e)));
+    });
   }
 
   @Path("/order/:orderId")
