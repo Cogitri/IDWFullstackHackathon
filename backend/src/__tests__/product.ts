@@ -26,14 +26,10 @@ describe("GET /product", () => {
 });
 
 describe("POST /product", () => {
-  it("should return 200 & be OK", async (done) => {
+  it("should return 201 & be OK", async (done) => {
     request(app)
-      .post("/product/25")
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
+      .post("/product")
+      .expect(201)
       .end(function (err, res) {
         if (err) {
           throw err;
@@ -44,14 +40,10 @@ describe("POST /product", () => {
 });
 
 describe("DELETE /product", () => {
-  it("should return 200 & be OK", async (done) => {
+  it("should return 204 & be OK", async (done) => {
     request(app)
       .delete("/product/25")
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .expect(function (res) {
-        res.body.status = "ok";
-      })
+      .expect(204)
       .end(function (err, res) {
         if (err) {
           throw err;

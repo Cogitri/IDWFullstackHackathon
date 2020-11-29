@@ -1,12 +1,20 @@
-import { Path, GET, PathParam, POST, DELETE } from "typescript-rest";
-import { Status, StatusErr, StatusOK } from "./common";
+import {
+  Path,
+  GET,
+  PathParam,
+  POST,
+  DELETE,
+  Return,
+  ContextRequest,
+} from "typescript-rest";
+import express from "express";
 
 interface Product {
   id: number;
   category: Category;
   name: string;
   description: string;
-  photoUrls: [string];
+  photoUrls: string[];
   expiryDate: string;
   manufacturingDate: string;
   paymentMethod: string;
@@ -35,13 +43,16 @@ export interface ProductAndAmount {
 @Path("/product")
 export class ProductService {
   @POST
-  addNewProduct(): string {
-    return '{"status":"ok"}';
+  addNewProduct(
+    product: Product,
+    @ContextRequest request: express.Request
+  ): Return.NewResource<void> {
+    return new Return.NewResource<void>(request.url + "/" + product.id);
   }
 
   @Path(":productId")
   @GET
-  getProductInfo(@PathParam("productId") productId: string): Status {
+  getProductInfo(@PathParam("productId") productId: string): Product {
     let product: Product = {
       id: 0,
       name: "example",
@@ -56,18 +67,10 @@ export class ProductService {
       price: 0,
       stock: 10,
     };
-    return StatusOK;
-  }
-
-  @Path(":productId")
-  @POST
-  updateProductInfo(@PathParam("productId") productId: string): Status {
-    return StatusOK;
+    return product;
   }
 
   @Path(":productId")
   @DELETE
-  deleteProduct(@PathParam("productId") productId: string): Status {
-    return StatusOK;
-  }
+  deleteProduct(@PathParam("productId") productId: string): void {}
 }

@@ -5,9 +5,11 @@ import {
   POST,
   Context,
   ServiceContext,
+  Return,
+  ContextRequest,
 } from "typescript-rest";
 import { ProductAndAmount } from "./product";
-import { Status, StatusErr, StatusOK } from "./common";
+import express from "express";
 
 interface Order {
   id: number;
@@ -32,8 +34,11 @@ export class StoreService {
 
   @Path("/order")
   @POST
-  placeOrder(order: Order): Status {
-    return StatusOK;
+  placeOrder(
+    order: Order,
+    @ContextRequest request: express.Request
+  ): Return.NewResource<void> {
+    return new Return.NewResource<void>(request.url + "/" + order.id);
   }
 
   @Path("/order/:orderId")
