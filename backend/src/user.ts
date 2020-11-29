@@ -13,7 +13,6 @@ import {
   Security,
 } from "typescript-rest";
 import { ProductAndAmount, ProductStock, StatusEnum } from "./product";
-import express from "express";
 import { ApiServer, DbConnection } from "./server";
 import * as Entities from "./entities";
 
@@ -65,6 +64,7 @@ export class UserService {
       DbConnection.getInstance()
         .manager.save(user)
         .then((user) => {
+          createdUser.id = user.id;
           resolve(
             new Return.NewResource<User>(
               this.context.request.url + "/" + user.id,
@@ -79,6 +79,7 @@ export class UserService {
   }
 
   @GET
+  @Security()
   getAllUsers(): Promise<Entities.Users[]> {
     return new Promise<Entities.Users[]>((resolve, reject) => {
       DbConnection.getInstance()
@@ -94,6 +95,7 @@ export class UserService {
 
   @Path("/products/:username")
   @GET
+  @Security()
   async getAllProductsOfUser() {
     let products = await DbConnection.getInstance().manager.find(
       Entities.Products
