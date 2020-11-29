@@ -14,6 +14,6 @@ const pool = mariadb.createPool({
 	connectionLimit: 5,
 });
 
-server.start().then(function () {
-	console.log('Sucessfully started server');
+app.listen(8000, function () {
+	console.log('Rest Server listening on port 8000!');
 });
