@@ -77,15 +77,39 @@ export class StoreService {
   @Path("/order/:orderId")
   @GET
   @Security()
-  getOrderInfo(@PathParam("orderId") orderId: number): Order {
+  async getOrderInfo(@PathParam("orderId") orderId: number) {
+    let dbOrder = await DbConnection.getInstance().manager.findOne(
+      Entities.Orders,
+      orderId
+    );
+
+    let infos = await DbConnection.getInstance().manager.find(
+      Entities.OrderedProducts
+    );
+    let productArray: ProductAndAmount[] = [];
+
+    for (let i = 0; i < infos.length; i++) {
+      let info = infos[i];
+
+      if (info.order_id == orderId) {
+        productArray.push({
+          quantity: info.quantity,
+          productId: info.product_id,
+        });
+      }
+    }
+
     let order: Order = {
-      id: orderId,
-      products: [{ productId: 5, quantity: 3 }],
-      orderDate: new Date(),
-      status: StatusEnum.Placed,
-      customerId: 5,
-      farmerId: 6,
-      totalPrice: 30,
+      id: dbOrder.id,
+      orderDate: dbOrder.order_date,
+      customerId: dbOrder.customer_id,
+      farmerId: dbOrder.farmer_id,
+      status:
+        StatusEnum[
+          dbOrder.status.charAt(0).toUpperCase + dbOrder.status.slice(1)
+        ],
+      totalPrice: dbOrder.total_price,
+      products: productArray,
     };
     return order;
   }

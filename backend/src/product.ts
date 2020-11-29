@@ -9,10 +9,12 @@ import {
   Security,
   ServiceContext,
   Context,
+  Errors,
 } from "typescript-rest";
 import express from "express";
 import { DbConnection } from "./server";
 import * as Entities from "./entities";
+import { BadRequestError } from "typescript-rest/dist/server/model/errors";
 
 export interface Tag {
   id: number;
@@ -62,35 +64,37 @@ export class ProductService {
 
   @POST
   @Security()
-  addNewProduct(product: ProductStock): Promise<Return.NewResource<void>> {
-    return new Promise<Return.NewResource<void>>((resolve, reject) => {
-      let dbProduct = new Entities.Products();
+  async addNewProduct(product: ProductStock) {
+    let dbProduct = new Entities.Products();
 
-      dbProduct.id = product.product.id;
-      dbProduct.category_id = product.product.category.id;
-      dbProduct.deliveryMethod = product.product.deliveryMethod;
-      dbProduct.description = product.product.description;
-      dbProduct.expiryDate = new Date(product.product.expiryDate);
-      dbProduct.manufacturingDate = new Date(product.product.manufacturingDate);
-      dbProduct.paymentMethod = product.product.paymentMethod;
-      dbProduct.price = product.product.price;
-      dbProduct.productname = product.product.name;
-      dbProduct.status = product.product.status;
-      dbProduct.stock = product.amount;
+    let category = await DbConnection.getInstance().manager.findOne(
+      Entities.Categories,
+      product.product.category.id
+    );
 
-      DbConnection.getInstance()
-        .manager.save(dbProduct)
-        .then(() => {
-          resolve(
-            new Return.NewResource(
-              this.context.request.url + "/" + dbProduct.id
-            )
-          );
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    });
+    if (category === undefined) {
+      let dbCategory = new Entities.Categories();
+
+      dbCategory.category_name = product.product.category.name;
+
+      await DbConnection.getInstance().manager.save(dbCategory);
+    }
+
+    dbProduct.category_id = product.product.category.id;
+    dbProduct.deliveryMethod = product.product.deliveryMethod;
+    dbProduct.description = product.product.description;
+    dbProduct.expiryDate = new Date(product.product.expiryDate);
+    dbProduct.manufacturingDate = new Date(product.product.manufacturingDate);
+    dbProduct.paymentMethod = product.product.paymentMethod;
+    dbProduct.price = product.product.price;
+    dbProduct.productname = product.product.name;
+    dbProduct.status = product.product.status;
+    dbProduct.stock = product.amount;
+
+    await DbConnection.getInstance().manager.save(dbProduct);
+    return new Return.NewResource(
+      this.context.request.url + "/" + dbProduct.id
+    );
   }
 
   @Path(":productId")
@@ -101,6 +105,9 @@ export class ProductService {
       Entities.Products,
       productId
     );
+    if (product === undefined) {
+      throw new Errors.NotFoundError("No such product");
+    }
     let category = await DbConnection.getInstance().manager.findOne(
       Entities.Categories,
       product.category_id
