@@ -5,7 +5,7 @@ services:
     image: mariadb:latest
     restart: always
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
       MYSQL_DATABASE: golocal
       MYSQL_USER: golocal
       MYSQL_PASSWORD: Ii5mie8kiequ9XahcohRai5eihioBooy
