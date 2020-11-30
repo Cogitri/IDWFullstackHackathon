@@ -15,7 +15,6 @@ services:
     container_name: backend
     build: ./backend
     restart: always
-    command: /usr/local/bin/exe
     depends_on:
       - database
     ports:
