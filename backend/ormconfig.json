@@ -9,11 +9,5 @@
    "logging": false,
    "entities": [
       "dist/entities.js"
-   ],
-   "migrations": [
-      "src/migration/**/*.ts"
-   ],
-   "subscribers": [
-    "src/subscriber/**/*.ts"
    ]
 }
