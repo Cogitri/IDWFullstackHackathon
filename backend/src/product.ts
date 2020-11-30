@@ -38,6 +38,7 @@ export interface Product {
 
 export interface ProductStock {
   product: Product;
+  farmerId: number;
   amount: number;
 }
 
@@ -65,6 +66,7 @@ export class ProductService {
   @POST
   async addNewProduct(product: ProductStock) {
     let dbProduct = new Entities.Products();
+    let dbOffering = new Entities.Offering();
 
     let category = await DbConnection.getInstance().manager.findOne(
       Entities.Categories,
@@ -76,10 +78,17 @@ export class ProductService {
 
       dbCategory.category_name = product.product.category.name;
 
-      await DbConnection.getInstance().manager.save(dbCategory);
+      let createdCategory = await DbConnection.getInstance().manager.save(
+        dbCategory
+      );
+      dbProduct.category_id = createdCategory.id;
+    } else {
+      dbProduct.category_id = product.product.category.id;
     }
 
-    dbProduct.category_id = product.product.category.id;
+    dbOffering.farmer_id = product.farmerId;
+    dbOffering.product_id = product.product.id;
+
     dbProduct.deliveryMethod = product.product.deliveryMethod;
     dbProduct.description = product.product.description;
     dbProduct.expiryDate = new Date(product.product.expiryDate);
@@ -91,6 +100,7 @@ export class ProductService {
     dbProduct.stock = product.amount;
 
     await DbConnection.getInstance().manager.save(dbProduct);
+    await DbConnection.getInstance().manager.save(dbOffering);
     return new Return.NewResource(
       this.context.request.url + "/" + dbProduct.id
     );

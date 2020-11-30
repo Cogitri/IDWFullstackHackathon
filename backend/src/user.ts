@@ -108,8 +108,18 @@ export class UserService {
         Entities.Categories,
         product.category_id
       );
+      let offerings = await DbConnection.getInstance().manager.find(
+        Entities.Offering
+      );
+      let farmerId = 0;
+      for (let o of offerings) {
+        if (o.product_id == product.id) {
+          farmerId = o.farmer_id;
+        }
+      }
       arr.push({
         amount: product.stock,
+        farmerId,
         product: {
           id: product.id,
           expiryDate: product.expiryDate.toISOString(),

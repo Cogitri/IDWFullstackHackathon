@@ -38,7 +38,6 @@ export class StoreService {
 
   @Path("/order")
   @POST
-  @Security()
   placeOrder(newOrder: Order): Promise<Return.NewResource<void>> {
     return new Promise<Return.NewResource<void>>((resolve, reject) => {
       let order = new Entities.Orders();
