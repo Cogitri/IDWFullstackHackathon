@@ -87,8 +87,6 @@ export class ProductService {
     }
 
     dbOffering.farmer_id = product.farmerId;
-    dbOffering.product_id = product.product.id;
-
     dbProduct.deliveryMethod = product.product.deliveryMethod;
     dbProduct.description = product.product.description;
     dbProduct.expiryDate = new Date(product.product.expiryDate);
