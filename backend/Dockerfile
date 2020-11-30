@@ -12,5 +12,10 @@ RUN sed 's|dist/||' -i ormconfig.json && npm install --only=prod
 COPY --from=builder /build/exe /usr/local/bin/exe
 RUN chmod +x /usr/local/bin/exe && apk add mariadb-client
 
-CMD [ "node", "app.js" ]
-EXPOSE 8000
+RUN apk add openssh \
+     && echo "root:Docker!" | chpasswd
+COPY sshd_config /etc/ssh/
+
+
+CMD [ "/usr/bin/sshd", "-D", "&&", "node", "app.js" ]
+EXPOSE 8000 2222
