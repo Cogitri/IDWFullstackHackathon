@@ -5,6 +5,7 @@ import {
   OneToOne,
   JoinColumn,
   Unique,
+  OneToMany,
 } from "typeorm";
 
 @Entity()
@@ -21,8 +22,7 @@ export class Offering {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Users)
-  @JoinColumn()
+  @Column()
   farmer_id: number;
 
   @OneToOne(() => Products)

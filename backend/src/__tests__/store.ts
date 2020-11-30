@@ -3,12 +3,13 @@ import express from "express";
 import request from "supertest";
 import { Server } from "typescript-rest";
 import { ProductService } from "../product";
+import { UserService } from "../user";
 import { DbConnection } from "../server";
 import { createConnection } from "typeorm";
 import * as Entities from "../entities";
 
 const app = express();
-Server.buildServices(app, ProductService);
+Server.buildServices(app, ProductService, UserService);
 
 describe("POST /product", () => {
   it("should return 201 & be OK", async (done) => {

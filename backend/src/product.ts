@@ -85,8 +85,8 @@ export class ProductService {
     } else {
       dbProduct.category_id = product.product.category.id;
     }
-
     dbOffering.farmer_id = product.farmerId;
+    dbOffering.product_id = product.product.id;
     dbProduct.deliveryMethod = product.product.deliveryMethod;
     dbProduct.description = product.product.description;
     dbProduct.expiryDate = new Date(product.product.expiryDate);
@@ -111,10 +111,7 @@ export class ProductService {
       Entities.Offering
     );
 
-    console.log("Trying to find user of product " + product.id);
-
     for (let o of offerings) {
-      console.log(o);
       if (o.product_id == product.id) {
         let user = await DbConnection.getInstance().manager.findOne(
           Entities.Users,
