@@ -1,1 +1,1 @@
-export const apiURL = 'http://backend:8000';
+export const apiURL = '';
