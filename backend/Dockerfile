@@ -12,5 +12,5 @@ RUN sed 's|dist/||' -i ormconfig.json && npm install --only=prod
 COPY --from=builder /build/exe /usr/local/bin/exe
 RUN chmod +x /usr/local/bin/exe && apk add mariadb-client
 
-ENTRYPOINT [ "/usr/local/bin/exe" ]
+CMD [ "node", "app.js" ]
 EXPOSE 8000
