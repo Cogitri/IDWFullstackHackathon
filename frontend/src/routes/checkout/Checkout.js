@@ -1,5 +1,6 @@
 import { Button, makeStyles } from '@material-ui/core';
 import Axios from 'axios-observable';
+import Axios2 from 'axios';
 import React, { useEffect, useState } from 'react';
 import { of } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -46,28 +47,41 @@ export const Checkout = () => {
 
 	useEffect(() => {
 		if (!productsInCart.length || !user) return;
-		const productId = productsInCart[0].product.id;
+		const productId = productsInCart[0]?.product?.id;
+		if(!productId) return;
 		const farmer = user.filter(isFarmer);
 
-		const farmerOfProduct = farmer.find(
-			(dude) =>
-				dude.products.includes((product) => product.productId === productId)
-					?.length !== 0
-		);
-
-		if (!farmerOfProduct)
-			return console.warn('Error: farmer not found', 'should not occur');
-
 		const mockResult = userResponseDataMock[0];
-
 		const shouldUseMock = true;
-
 		const willUseMockData =
 			mockResult !== undefined && shouldUseMock && allowMocks;
 
+		let farmerOfProductName
+
+		if(willUseMockData) {
+			farmerOfProductName = farmer.find(
+				(dude) =>
+					dude.products.includes((product) => product.productId === productId)
+						?.length !== 0
+			);
+		} else {
+			Axios2.post(`${apiURL}/product/getUserId`, {id: productId},  {
+				headers: { jwt: localStorage.getItem('jwt') },
+			}).then((response) => {
+				console.log('response', response);
+				return response.data
+			}).then(data => {
+				console.log('data', data);
+				farmerOfProductName = data.username
+			})
+		}
+
+		if (!farmerOfProductName)
+			return console.warn('Error: farmer not found', 'should not occur');
+
 		const $fetch = willUseMockData
 			? of({ data: mockResult })
-			: Axios.get(`${apiURL}/user/${farmerOfProduct.username}`, {
+			: Axios.get(`${apiURL}/user/${farmerOfProductName}`, {
 					headers: { jwt: localStorage.getItem('jwt') },
 			  });
 

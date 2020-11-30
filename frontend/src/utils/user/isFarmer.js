@@ -1,3 +1,3 @@
-const isFarmer = (user) => user?.isFarmer === true;
+const isFarmer = (user) => user?.licensed === true;
 
 export default isFarmer;

@@ -61,6 +61,7 @@ export const LoginForm = ({ initialFormState = 'login' }) => {
 						label='Password'
 						variant='outlined'
 						value={password}
+						type='password'
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 					{formState === 'signup' && (

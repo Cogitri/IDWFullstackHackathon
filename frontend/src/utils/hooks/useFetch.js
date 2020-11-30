@@ -17,10 +17,12 @@ const useFetch = (route, params, mockResultData, shouldUseMock = true) => {
 
 		const $fetch = willUseMockData
 			? of({ data: mockResultData })
-			: Axios.get(route, { headers: { jwt }, ...params });
+			: Axios.get(route, { headers: { Authorization: 'JWT '+jwt }, ...params });
 
 		$fetch.pipe(first()).subscribe(
-			(response) => setData(response.data),
+			(response) => {
+				setData(response.data)
+			},
 			(error) => {
 				snackbarService.showSnackbar(
 					`Error ${JSON.stringify(error.message)}`,
@@ -29,7 +31,7 @@ const useFetch = (route, params, mockResultData, shouldUseMock = true) => {
 				console.warn('fetchError', error);
 			}
 		);
-	}, [params, route, mockResultData, shouldUseMock]);
+	}, []);
 
 	return { data };
 };

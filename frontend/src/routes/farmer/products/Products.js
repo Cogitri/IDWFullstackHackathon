@@ -52,7 +52,7 @@ export const Products = () => {
 	const { farmerId } = useParams();
 
 	const productsAndAmounts = useFetch(
-		`${apiURL}/product/${farmerId}`,
+		`${apiURL}/user/products/${farmerId}`,
 		{},
 		productResponseDataMock
 	).data;
