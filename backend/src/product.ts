@@ -104,6 +104,29 @@ export class ProductService {
     );
   }
 
+  @Path("/getUserId")
+  @POST
+  async getUserOfProduct(product: Product) {
+    let offerings = await DbConnection.getInstance().manager.find(
+      Entities.Offering
+    );
+
+    console.log("Trying to find user of product " + product.id);
+
+    for (let o of offerings) {
+      console.log(o);
+      if (o.product_id == product.id) {
+        let user = await DbConnection.getInstance().manager.findOne(
+          Entities.Users,
+          o.farmer_id
+        );
+        return { username: user.username };
+      }
+    }
+
+    return new Errors.NotFoundError("Couldn't find product");
+  }
+
   @Path(":productId")
   @GET
   async getProductInfo(@PathParam("productId") productId: number) {

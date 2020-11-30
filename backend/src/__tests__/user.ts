@@ -8,6 +8,7 @@ import { createConnection } from "typeorm";
 import * as Entities from "../entities";
 
 const app = express();
+
 Server.buildServices(app, UserService);
 
 describe("POST /user", () => {

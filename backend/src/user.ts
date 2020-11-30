@@ -101,13 +101,14 @@ export class UserService {
     let products = await DbConnection.getInstance().manager.find(
       Entities.Products
     );
-    let arr: ProductStock[];
+    let arr: ProductStock[] = [];
     for (let i = 0; i < products.length; i++) {
       let product = products[i];
       let category = await DbConnection.getInstance().manager.findOne(
         Entities.Categories,
         product.category_id
       );
+
       let offerings = await DbConnection.getInstance().manager.find(
         Entities.Offering
       );
@@ -117,6 +118,17 @@ export class UserService {
           farmerId = o.farmer_id;
         }
       }
+
+      let photoUrls = await DbConnection.getInstance().manager.find(
+        Entities.PhotoUrls
+      );
+      let urls: string[] = [];
+      for (let p of photoUrls) {
+        if (p.product_id == product.id) {
+          urls.push(p.url);
+        }
+      }
+
       arr.push({
         amount: product.stock,
         farmerId,
@@ -138,7 +150,7 @@ export class UserService {
             ],
           price: product.price,
           tags: [],
-          photoUrls: [],
+          photoUrls: urls,
         },
       });
     }
