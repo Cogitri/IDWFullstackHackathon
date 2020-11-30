@@ -6,15 +6,26 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: golocal
+      MYSQL_USER: golocal
+      MYSQL_PASSWORD: Ii5mie8kiequ9XahcohRai5eihioBooy
+    ports:
+      - "3306:3306"
   backend:
     container_name: backend
     image: "golocal.azurecr.io/backend_idwgolocal:latest"
-    ports:
-      - 8000:8000
     restart: always
+    command: /usr/local/bin/exe
+    depends_on:
+      - database
+    ports:
+      - "8000:8000"
   frontend:
+    depends_on:
+      - backend
+      - database
     container_name: frontend
     image: "golocal.azurecr.io/frontend_idwgolocal:latest"
     ports:
-      - 80:80
+      - "80:80"
     restart: always
