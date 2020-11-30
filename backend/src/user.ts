@@ -127,7 +127,9 @@ export class UserService {
         if (p.product_id == product.id) {
           urls.push(p.url);
         }
+        console.log(p, product);
       }
+      console.log(urls);
 
       arr.push({
         amount: product.stock,
