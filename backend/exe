@@ -1,4 +1,8 @@
 #!/bin/sh
 
-# HACKY HACKY HACKY: MariaDB needs a few secs until it has completed setup and can accept connections 
-sleep 10 && node app.js
+# MariaDB needs a bit until it can accept connections
+while ! mysqladmin --user=golocal --password=Ii5mie8kiequ9XahcohRai5eihioBooy --host "127.0.0.1" ping; do
+    sleep 1
+done
+
+node app.js
