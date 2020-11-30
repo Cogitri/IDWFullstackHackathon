@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # MariaDB needs a bit until it can accept connections
-while ! mysqladmin --user=golocal --password=Ii5mie8kiequ9XahcohRai5eihioBooy --host "127.0.0.1" ping; do
+while ! mysqladmin --user=golocal --password=Ii5mie8kiequ9XahcohRai5eihioBooy --host "database" ping; do
     sleep 1
 done
+
+sleep 2
 
 node app.js
