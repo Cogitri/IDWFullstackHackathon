@@ -43,32 +43,35 @@ export class UserService {
   context: ServiceContext;
 
   @POST
-  createUser(createdUser: User): Promise<Return.NewResource<User>> {
-    return new Promise<Return.NewResource<User>>((resolve, reject) => {
+  createUser(login: any): Promise<Return.NewResource<any>> {
+    return new Promise<Return.NewResource<any>>((resolve, reject) => {
       let user = new Entities.Users();
-      user.username = createdUser.username;
-      user.passwordHash = createdUser.passwordHash;
-      user.firstName = createdUser.firstName;
-      user.lastName = createdUser.lastName;
-      user.email = createdUser.email;
-      user.phone = createdUser.phone;
-      user.longitude = createdUser.longitude;
-      user.latitude = createdUser.latitude;
-      user.licensed = createdUser.isFarmer;
+      user.passwordHash = login.password;
+      user.username = login.username;
 
-      if (createdUser.isFarmer) {
-        user.farmingMethodology = createdUser.farmingMethodology;
-        user.covidGuidelines = createdUser.covidGuidelines;
+      if (login.license != "") {
+        user.licensed = true;
+      } else {
+        user.licensed = false;
       }
+
+      user.email = " ";
+      user.firstName = "";
+      user.lastName = "";
+      user.phone = "";
+      user.longitude = 0;
+      user.latitude = 0;
 
       DbConnection.getInstance()
         .manager.save(user)
         .then((user) => {
-          createdUser.id = user.id;
           resolve(
-            new Return.NewResource<User>(
+            new Return.NewResource<any>(
               this.context.request.url + "/" + user.id,
-              createdUser
+              ApiServer.generateJWTToken({
+                username: login.username,
+                id: user.id,
+              })
             )
           );
         })
@@ -79,7 +82,6 @@ export class UserService {
   }
 
   @GET
-  @Security()
   getAllUsers(): Promise<Entities.Users[]> {
     return new Promise<Entities.Users[]>((resolve, reject) => {
       DbConnection.getInstance()
@@ -95,7 +97,6 @@ export class UserService {
 
   @Path("/products/:username")
   @GET
-  @Security()
   async getAllProductsOfUser() {
     let products = await DbConnection.getInstance().manager.find(
       Entities.Products
@@ -138,35 +139,39 @@ export class UserService {
   @Path("/login")
   @POST
   async loginUser(login: Login): Promise<any> {
-    return new Promise<any>(function (resolve, reject) {
-      if (login.username == login.password) {
-        let user: User = {
-          id: 0,
-          username: login.username,
-          passwordHash: "abcd123",
-          firstName: "admin",
-          lastName: "admin",
-          email: "admin@example.org",
-          phone: "+490000",
-          longitude: 0,
-          latitude: 0,
-          isFarmer: false,
-        };
-        resolve(ApiServer.generateJWTToken(user));
-      } else {
-        reject(new Errors.BadRequestError("bad username or password"));
+    let users = await DbConnection.getInstance().manager.find(Entities.Users);
+
+    for (let u of users) {
+      if (u.username == login.username) {
+        if (u.passwordHash == login.password) {
+          let user: User = {
+            id: u.id,
+            username: u.username,
+            passwordHash: u.passwordHash,
+            firstName: u.firstName,
+            lastName: u.lastName,
+            email: u.email,
+            phone: u.phone,
+            longitude: u.longitude,
+            latitude: u.latitude,
+            isFarmer: u.licensed,
+          };
+          return ApiServer.generateJWTToken(user);
+        } else {
+          throw new Errors.BadRequestError("Bad password");
+        }
       }
-    });
+    }
+
+    throw new Errors.BadRequestError("No such user");
   }
 
   @Path("/logout")
   @GET
-  @Security()
   logoutUser(@QueryParam("username") username: string): void {}
 
   @Path(":username")
   @GET
-  @Security()
   getUserInfo(@PathParam("username") username: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
       DbConnection.getInstance()
@@ -201,7 +206,6 @@ export class UserService {
   }
 
   @PUT
-  @Security()
   editUserInfo(editedUser: User): User {
     try {
       let user: User = {

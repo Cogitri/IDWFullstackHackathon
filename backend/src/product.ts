@@ -63,7 +63,6 @@ export class ProductService {
   context: ServiceContext;
 
   @POST
-  @Security()
   async addNewProduct(product: ProductStock) {
     let dbProduct = new Entities.Products();
 
@@ -99,7 +98,6 @@ export class ProductService {
 
   @Path(":productId")
   @GET
-  @Security()
   async getProductInfo(@PathParam("productId") productId: number) {
     let product = await DbConnection.getInstance().manager.findOne(
       Entities.Products,
@@ -139,7 +137,6 @@ export class ProductService {
 
   @Path(":productId")
   @DELETE
-  @Security()
   async deleteProduct(@PathParam("productId") productId: number) {
     await DbConnection.getInstance().manager.delete(Entities.Products, {
       id: productId,

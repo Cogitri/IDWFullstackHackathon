@@ -72,7 +72,6 @@ export class StoreService {
 
   @Path("/order/:orderId")
   @GET
-  @Security()
   async getOrderInfo(@PathParam("orderId") orderId: number) {
     let dbOrder = await DbConnection.getInstance().manager.findOne(
       Entities.Orders,
