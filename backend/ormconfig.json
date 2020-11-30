@@ -1,6 +1,6 @@
 {
    "type": "mysql",
-   "host": "localhost",
+   "host": "database",
    "port": 3306,
    "username": "golocal",
    "password": "Ii5mie8kiequ9XahcohRai5eihioBooy",
