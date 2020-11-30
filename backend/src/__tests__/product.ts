@@ -1,15 +1,23 @@
 import { assert } from "console";
 import express from "express";
 import request from "supertest";
-import { Server } from "typescript-rest";
+import { Server, PassportAuthenticator } from "typescript-rest";
 import { ProductService } from "../product";
+<<<<<<< HEAD
 import { DbConnection } from "../server";
 import { createConnection } from "typeorm";
 import * as Entities from "../entities";
+=======
+import { MockStrategy } from "passport-mock-strategy";
+>>>>>>> 7f656f6 (backend: fix unittests)
 
 const app = express();
+
+const authenticator = new PassportAuthenticator(new MockStrategy());
+Server.registerAuthenticator(authenticator);
 Server.buildServices(app, ProductService);
 
+<<<<<<< HEAD
 describe("POST /product", () => {
   it("should return 201 & be OK", async (done) => {
     createConnection({
@@ -70,5 +78,52 @@ describe("POST /product", () => {
           done();
         });
     });
+=======
+describe("GET /product", () => {
+  it("should return 200 & the correct product", async (done) => {
+    request(app)
+      .get("/product/25")
+      //.expect("Content-Type", /json/)
+      .expect(200)
+      .expect(function (res) {
+        console.log(res);
+        res.body.id = 25;
+      })
+      .end(function (err, res) {
+        if (err) {
+          throw err;
+        }
+        done();
+      });
+  });
+});
+
+describe("POST /product", () => {
+  it("should return 201 & be OK", async (done) => {
+    request(app)
+      .post("/product")
+      .send()
+      .expect(201)
+      .end(function (err, res) {
+        if (err) {
+          throw err;
+        }
+        done();
+      });
+  });
+});
+
+describe("DELETE /product", () => {
+  it("should return 204 & be OK", async (done) => {
+    request(app)
+      .delete("/product/25")
+      .expect(204)
+      .end(function (err, res) {
+        if (err) {
+          throw err;
+        }
+        done();
+      });
+>>>>>>> 7f656f6 (backend: fix unittests)
   });
 });
